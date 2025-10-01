@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2196F3">
+    <title>PWA Todo App</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlBXQSBUb2RvIEFwcCIsCiAgInNob3J0X25hbWUiOiAiVG9kbyIsCiAgImRlc2NyaXB0aW9uIjogItCh10LguIHguKPguIHguLPguYTguKPguYBguKPguK3guIfguYDguKPguIogUFdBIiwKICAic3RhcnRfdXJsIjogIi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNmZmZmZmYiLAogICJ0aGVtZV9jb2xvciI6ICIjMjE5NkYzIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCNGJXeHVjejBpYUhSMGNEb3ZMM2QzZHk1M00yNXZjbWN2TWpBd01DOXpkbWNpSUhkcFpIUm9QU0l5TkRBaUlHaGxhV2RvZEQwaU1qUXdJajQ4Y21WamRDQjNhV1IwYUQwaU1qUXdJaUJvWldsbmFIUTlJakl3TUNJZ1ptbHNiRDBpSXpJeE9UWkdNeUl2UGp3dmMzWm5QZz09IiwKICAgICAgInNpemVzIjogIjI0MHgyNDAiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ==">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        #todoInput {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        #todoInput:focus {
+            outline: none;
+            border-color: #2196F3;
+        }
+
+        #addBtn {
+            padding: 15px 25px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        #addBtn:hover {
+            background: #1976D2;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .todo-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .todo-item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+
+        .todo-text {
+            flex: 1;
+            margin: 0 15px;
+            font-size: 16px;
+        }
+
+        .todo-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .delete-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .delete-btn:hover {
+            background: #d32f2f;
+        }
+
+        .install-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+            display: none;
+            width: 100%;
+            transition: background 0.3s;
+        }
+
+        .notification-permission {
+            background: #FF9800;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+            width: 100%;
+            transition: background 0.3s;
+        }
+
+        .notification-permission:hover {
+            background: #F57C00;
+        }
+
+        .notification-badge {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            animation: slideIn 0.5s ease-out;
+            display: none;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .offline-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: none;
+            z-index: 1000;
+            animation: bounce 0.5s ease-out;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translate(-50%, 0);
+            }
+            40% {
+                transform: translate(-50%, -10px);
+            }
+            60% {
+                transform: translate(-50%, -5px);
+            }
+        }
+
+        .status {
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .online { background: rgba(76, 175, 80, 0.2); }
+        .offline { background: rgba(244, 67, 54, 0.2); }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 PWA Todo</h1>
+            <p>Progressive Web App Workshop</p>
+        </div>
+
+        <div class="card">
+            <div class="input-group">
+                <input type="text" id="todoInput" placeholder="เพิ่มงานใหม่..." />
+                <button id="addBtn">เพิ่ม</button>
+            </div>
+            
+            <button id="installBtn" class="install-btn">📱 ติดตั้งแอป</button>
+            <button id="notificationBtn" class="notification-permission">🔔 เปิดการแจ้งเตือน</button>
+            
+            <div id="todoList"></div>
+        </div>
+
+        <div id="status" class="status online">🟢 ออนไลน์</div>
+        
+        <!-- Notification Badge -->
+        <div id="notificationBadge" class="notification-badge">
+            <span id="badgeText">✅ พร้อมใช้งาน!</span>
+        </div>
+        
+        <!-- Offline Indicator -->
+        <div id="offlineIndicator" class="offline-indicator">
+            📱 กำลังทำงานแบบออฟไลน์
+        </div>
+    </div>
+
+    <script>
+        // ตัวแปรสำหรับจัดเก็บข้อมูล
+        let todos = JSON.parse(localStorage.getItem('todos') || '[]');
+        let deferredPrompt;
+
+        // องค์ประกอบ HTML
+        const todoInput = document.getElementById('todoInput');
+        const addBtn = document.getElementById('addBtn');
+        const todoList = document.getElementById('todoList');
+        const installBtn = document.getElementById('installBtn');
+        const notificationBtn = document.getElementById('notificationBtn');
+        const status = document.getElementById('status');
+        const notificationBadge = document.getElementById('notificationBadge');
+        const offlineIndicator = document.getElementById('offlineIndicator');
+
+        // Enhanced Service Worker with Notifications
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('data:text/javascript;base64,Y29uc3QgQ0FDSEVfTkFNRSA9ICdwd2EtdG9kby12Mic7CmNvbnN0IHVybHNUb0NhY2hlID0gWwogICcvJywKICAnZGF0YTp0ZXh0L2h0bWw7Y2hhcnNldD11dGYtOCwnCl07CgpzZWxmLmFkZEV2ZW50TGlzdGVuZXIoJ2luc3RhbGwnLCBmdW5jdGlvbihldmVudCkgewogIGV2ZW50LndhaXRVbnRpbCgKICAgIGNhY2hlcy5vcGVuKENBQ0hFX05BTUUpLnRoZW4oZnVuY3Rpb24oY2FjaGUpIHsKICAgICAgY29uc29sZS5sb2coJ0NhY2hlIG9wZW5lZCcpOwogICAgICByZXR1cm4gY2FjaGUuYWRkQWxsKHVybHNUb0NhY2hlKTsKICAgIH0pCiAgKTsKfSk7CgpzZWxmLmFkZEV2ZW50TGlzdGVuZXIoJ2ZldGNoJywgZnVuY3Rpb24oZXZlbnQpIHsKICBldmVudC5yZXNwb25kV2l0aCgKICAgIGNhY2hlcy5tYXRjaChldmVudC5yZXF1ZXN0KS50aGVuKGZ1bmN0aW9uKHJlc3BvbnNlKSB7CiAgICAgIGlmIChyZXNwb25zZSkgewogICAgICAgIHJldHVybiByZXNwb25zZTsKICAgICAgfQogICAgICByZXR1cm4gZmV0Y2goZXZlbnQucmVxdWVzdCkudGhlbihmdW5jdGlvbihyZXNwb25zZSkgewogICAgICAgIGlmICghcmVzcG9uc2UgfHwgcmVzcG9uc2Uuc3RhdHVzICE9PSAyMDAgfHwgcmVzcG9uc2UudHlwZSAhPT0gJ2Jhc2ljJykgewogICAgICAgICAgcmV0dXJuIHJlc3BvbnNlOwogICAgICAgIH0KICAgICAgICB2YXIgcmVzcG9uc2VUb0NhY2hlID0gcmVzcG9uc2UuY2xvbmUoKTsKICAgICAgICBjYWNoZXMub3BlbihDQUNIRV9OQU1FKS50aGVuKGZ1bmN0aW9uKGNhY2hlKSB7CiAgICAgICAgICBjYWNoZS5wdXQoZXZlbnQucmVxdWVzdCwgcmVzcG9uc2VUb0NhY2hlKTsKICAgICAgICB9KTsKICAgICAgICByZXR1cm4gcmVzcG9uc2U7CiAgICAgIH0pOwogICAgfSkKICApOwp9KTsKCnNlbGYuYWRkRXZlbnRMaXN0ZW5lcignbm90aWZpY2F0aW9uY2xpY2snLCBmdW5jdGlvbihldmVudCkgewogIGV2ZW50Lm5vdGlmaWNhdGlvbi5jbG9zZSgpOwogIGV2ZW50LndhaXRVbnRpbCgKICAgIGNsaWVudHMub3BlbldpbmRvdygnLycpCiAgKTsKfSk7CgpzZWxmLmFkZEV2ZW50TGlzdGVuZXIoJ3B1c2gnLCBmdW5jdGlvbihldmVudCkgewogIGNvbnN0IG9wdGlvbnMgPSB7CiAgICBib2R5OiAn4Lie4Lia4LiB4Liy4Lij4LiB4Liz4LmE4Lij4LmA4LiA4Li14Lmˆ4Lii4Lin4LiZ4LmJ4LixISAnLAogICAgaWNvbjogJ2RhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjRiV3h1Y3owa2FIUjBjRG92TDNkM2R5NTNNMjV2Y21jdk1qQXdNQzl6ZG1jaUlIZHBaSFJvUFNJeU5EQWlJR2hsYVdkb2REMGlNalF3SWo0OGNtVmpkQ0IzYVdSMGFEMGlNalF3SWlCb1pXbG5hSFE5SWpJd01DSWdabWxzYkQwaWN6SXhPVFpHTXlJdlBqd3ZjM1puUGc9PScsCiAgICBiYWRnZTogJ2RhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjRiV3h1Y3owa2FIUjBjRG92TDNkM2R5NTNNMjV2Y21jdk1qQXdNQzl6ZG1jaUlIZHBaSFJvUFNJeU5EQWlJR2hsYVdkb2REMGlNalF3SWo0OGNtVmpkQ0IzYVdSMGFEMGlNalF3SWlCb1pXbG5hSFE5SWpJd01DSWdabWxzYkQwaWN6SXhPVFpHTXlJdlBqd3ZjM1puUGc9PScKICB9OwogIGV2ZW50LndhaXRVbnRpbCgKICAgIHNlbGYucmVnaXN0cmF0aW9uLnNob3dOb3RpZmljYXRpb24oJ1BXQSBUb2RvIEFwcCcsIG9wdGlvbnMpCiAgKTsKfSk7')
+                .then(() => {
+                    console.log('Service Worker registered successfully');
+                    showNotification('🎉 PWA พร้อมใช้งาน!', 'แอปสามารถทำงานแบบออฟไลน์ได้แล้ว');
+                })
+                .catch(err => console.log('Service Worker registration failed:', err));
+        }
+
+        // ฟังก์ชันแสดงรายการ Todo
+        function renderTodos() {
+            todoList.innerHTML = '';
+            todos.forEach((todo, index) => {
+                const todoItem = document.createElement('div');
+                todoItem.className = `todo-item ${todo.completed ? 'completed' : ''}`;
+                
+                todoItem.innerHTML = `
+                    <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''} 
+                           onchange="toggleTodo(${index})">
+                    <span class="todo-text">${todo.text}</span>
+                    <button class="delete-btn" onclick="deleteTodo(${index})">🗑️</button>
+                `;
+                
+                todoList.appendChild(todoItem);
+            });
+            
+            saveTodos();
+        }
+
+        // ฟังก์ชันเพิ่ม Todo
+        function addTodo() {
+            const text = todoInput.value.trim();
+            if (text) {
+                todos.push({
+                    text: text,
+                    completed: false,
+                    created: new Date().toISOString()
+                });
+                todoInput.value = '';
+                renderTodos();
+                
+                // แสดง Notification เมื่อเพิ่ม Todo สำเร็จ
+                showNotification('✅ เพิ่มงานแล้ว!', `"${text}" ถูกเพิ่มในรายการ`);
+            }
+        }
+
+        // ฟังก์ชันสลับสถานะ Todo
+        function toggleTodo(index) {
+            const todo = todos[index];
+            todos[index].completed = !todos[index].completed;
+            renderTodos();
+            
+            // แสดง Notification เมื่อเสร็จสิ้นงาน
+            if (todos[index].completed) {
+                showNotification('🎉 เสร็จแล้ว!', `"${todo.text}" ทำเสร็จเรียบร้อย`);
+            }
+        }
+
+        // ฟังก์ชันลบ Todo
+        function deleteTodo(index) {
+            const deletedTodo = todos[index];
+            todos.splice(index, 1);
+            renderTodos();
+            showNotification('🗑️ ลบแล้ว!', `"${deletedTodo.text}" ถูกลบออกจากรายการ`);
+        }
+
+        // ฟังก์ชันบันทึกข้อมูล
+        function saveTodos() {
+            localStorage.setItem('todos', JSON.stringify(todos));
+        }
+
+        // ฟังก์ชันแสดง Notification
+        function showNotification(title, body) {
+            // แสดง Badge บนหน้าจอ
+            showBadge(title);
+            
+            // แสดง Browser Notification (ถ้าได้รับอนุญาต)
+            if ('Notification' in window && Notification.permission === 'granted') {
+                navigator.serviceWorker.ready.then(registration => {
+                    registration.showNotification(title, {
+                        body: body,
+                        icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIj48cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCIgZmlsbD0iIzIxOTZGMyIvPjwvc3ZnPg==',
+                        badge: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIj48cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCIgZmlsbD0iIzIxOTZGMyIvPjwvc3ZnPg==',
+                        vibrate: [200, 100, 200],
+                        tag: 'pwa-todo',
+                        requireInteraction: false,
+                        silent: false
+                    });
+                });
+            }
+        }
+
+        // ฟังก์ชันแสดง Badge
+        function showBadge(text) {
+            document.getElementById('badgeText').textContent = text;
+            notificationBadge.style.display = 'block';
+            setTimeout(() => {
+                notificationBadge.style.display = 'none';
+            }, 3000);
+        }
+
+        // ฟังก์ชันขออนุญาต Notification
+        async function requestNotificationPermission() {
+            if ('Notification' in window) {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    notificationBtn.textContent = '✅ เปิดแจ้งเตือนแล้ว';
+                    notificationBtn.disabled = true;
+                    showNotification('🔔 การแจ้งเตือนพร้อมใช้งาน!', 'คุณจะได้รับการแจ้งเตือนเมื่อมีกิจกรรมใหม่');
+                    localStorage.setItem('notificationPermission', 'granted');
+                } else {
+                    showBadge('❌ ไม่สามารถเปิดการแจ้งเตือนได้');
+                }
+            }
+        }
+
+        // Event Listeners
+        addBtn.addEventListener('click', addTodo);
+        todoInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addTodo();
+            }
+        });
+
+        // Notification Permission
+        notificationBtn.addEventListener('click', requestNotificationPermission);
+
+        // PWA Installation
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'block';
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response: ${outcome}`);
+                deferredPrompt = null;
+                installBtn.style.display = 'none';
+            }
+        });
+
+        // Network Status
+        function updateStatus() {
+            const isOnline = navigator.onLine;
+            status.textContent = isOnline ? '🟢 ออนไลน์' : '🔴 ออฟไลน์';
+            status.className = `status ${isOnline ? 'online' : 'offline'}`;
+            
+            // แสดง/ซ่อน Offline Indicator
+            if (!isOnline) {
+                offlineIndicator.style.display = 'block';
+                showBadge('📱 โหมดออฟไลน์');
+            } else {
+                offlineIndicator.style.display = 'none';
+                showBadge('🟢 กลับมาออนไลน์แล้ว');
+            }
+        }
+
+        window.addEventListener('online', updateStatus);
+        window.addEventListener('offline', updateStatus);
+
+        // เริ่มต้นแอป
+        renderTodos();
+        updateStatus();
+        
+        // ตรวจสอบสถานะ Notification Permission
+        if (localStorage.getItem('notificationPermission') === 'granted') {
+            notificationBtn.textContent = '✅ เปิดแจ้งเตือนแล้ว';
+            notificationBtn.disabled = true;
+        }
+
+        console.log('🎉 PWA Workshop App Ready!');
+        console.log('Features:');
+        console.log('✅ Responsive Design');
+        console.log('✅ Enhanced Offline Support');
+        console.log('✅ Local Storage');
+        console.log('✅ Install Prompt');
+        console.log('✅ Service Worker with Cache');
+        console.log('✅ Push Notifications');
+        console.log('✅ Visual Feedback');
+        console.log('✅ Network Status Detection');
+    </script>
+</body>
+</html>
