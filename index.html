@@ -288,14 +288,26 @@
         const offlineIndicator = document.getElementById('offlineIndicator');
 
         // Enhanced Service Worker with Notifications
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('data:text/javascript;base64,Y29uc3QgQ0FDSEVfTkFNRSA9ICdwd2EtdG9kby12Mic7CmNvbnN0IHVybHNUb0NhY2hlID0gWwogICcvJywKICAnZGF0YTp0ZXh0L2h0bWw7Y2hhcnNldD11dGYtOCwnCl07CgpzZWxmLmFkZEV2ZW50TGlzdGVuZXIoJ2luc3RhbGwnLCBmdW5jdGlvbihldmVudCkgewogIGV2ZW50LndhaXRVbnRpbCgKICAgIGNhY2hlcy5vcGVuKENBQ0hFX05BTUUpLnRoZW4oZnVuY3Rpb24oY2FjaGUpIHsKICAgICAgY29uc29sZS5sb2coJ0NhY2hlIG9wZW5lZCcpOwogICAgICByZXR1cm4gY2FjaGUuYWRkQWxsKHVybHNUb0NhY2hlKTsKICAgIH0pCiAgKTsKfSk7CgpzZWxmLmFkZEV2ZW50TGlzdGVuZXIoJ2ZldGNoJywgZnVuY3Rpb24oZXZlbnQpIHsKICBldmVudC5yZXNwb25kV2l0aCgKICAgIGNhY2hlcy5tYXRjaChldmVudC5yZXF1ZXN0KS50aGVuKGZ1bmN0aW9uKHJlc3BvbnNlKSB7CiAgICAgIGlmIChyZXNwb25zZSkgewogICAgICAgIHJldHVybiByZXNwb25zZTsKICAgICAgfQogICAgICByZXR1cm4gZmV0Y2goZXZlbnQucmVxdWVzdCkudGhlbihmdW5jdGlvbihyZXNwb25zZSkgewogICAgICAgIGlmICghcmVzcG9uc2UgfHwgcmVzcG9uc2Uuc3RhdHVzICE9PSAyMDAgfHwgcmVzcG9uc2UudHlwZSAhPT0gJ2Jhc2ljJykgewogICAgICAgICAgcmV0dXJuIHJlc3BvbnNlOwogICAgICAgIH0KICAgICAgICB2YXIgcmVzcG9uc2VUb0NhY2hlID0gcmVzcG9uc2UuY2xvbmUoKTsKICAgICAgICBjYWNoZXMub3BlbihDQUNIRV9OQU1FKS50aGVuKGZ1bmN0aW9uKGNhY2hlKSB7CiAgICAgICAgICBjYWNoZS5wdXQoZXZlbnQucmVxdWVzdCwgcmVzcG9uc2VUb0NhY2hlKTsKICAgICAgICB9KTsKICAgICAgICByZXR1cm4gcmVzcG9uc2U7CiAgICAgIH0pOwogICAgfSkKICApOwp9KTsKCnNlbGYuYWRkRXZlbnRMaXN0ZW5lcignbm90aWZpY2F0aW9uY2xpY2snLCBmdW5jdGlvbihldmVudCkgewogIGV2ZW50Lm5vdGlmaWNhdGlvbi5jbG9zZSgpOwogIGV2ZW50LndhaXRVbnRpbCgKICAgIGNsaWVudHMub3BlbldpbmRvdygnLycpCiAgKTsKfSk7CgpzZWxmLmFkZEV2ZW50TGlzdGVuZXIoJ3B1c2gnLCBmdW5jdGlvbihldmVudCkgewogIGNvbnN0IG9wdGlvbnMgPSB7CiAgICBib2R5OiAn4Lie4Lia4LiB4Liy4Lij4LiB4Liz4LmE4Lij4LmA4LiA4Li14Lmˆ4Lii4Lin4LiZ4LmJ4LixISAnLAogICAgaWNvbjogJ2RhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjRiV3h1Y3owa2FIUjBjRG92TDNkM2R5NTNNMjV2Y21jdk1qQXdNQzl6ZG1jaUlIZHBaSFJvUFNJeU5EQWlJR2hsYVdkb2REMGlNalF3SWo0OGNtVmpkQ0IzYVdSMGFEMGlNalF3SWlCb1pXbG5hSFE5SWpJd01DSWdabWxzYkQwaWN6SXhPVFpHTXlJdlBqd3ZjM1puUGc9PScsCiAgICBiYWRnZTogJ2RhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjRiV3h1Y3owa2FIUjBjRG92TDNkM2R5NTNNMjV2Y21jdk1qQXdNQzl6ZG1jaUlIZHBaSFJvUFNJeU5EQWlJR2hsYVdkb2REMGlNalF3SWo0OGNtVmpkQ0IzYVdSMGFEMGlNalF3SWlCb1pXbG5hSFE5SWpJd01DSWdabWxzYkQwaWN6SXhPVFpHTXlJdlBqd3ZjM1puUGc9PScKICB9OwogIGV2ZW50LndhaXRVbnRpbCgKICAgIHNlbGYucmVnaXN0cmF0aW9uLnNob3dOb3RpZmljYXRpb24oJ1BXQSBUb2RvIEFwcCcsIG9wdGlvbnMpCiAgKTsKfSk7')
-                .then(() => {
-                    console.log('Service Worker registered successfully');
-                    showNotification('🎉 PWA พร้อมใช้งาน!', 'แอปสามารถทำงานแบบออฟไลน์ได้แล้ว');
-                })
-                .catch(err => console.log('Service Worker registration failed:', err));
-        }
+       const CACHE_NAME = 'pwa-todo-cache-v1';
+const urlsToCache = [
+  '/',
+  '/index.html'
+];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.addAll(urlsToCache))
+  );
+});
+
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request)
+      .then((response) => response || fetch(event.request))
+  );
+});
+
 
         // ฟังก์ชันแสดงรายการ Todo
         function renderTodos() {
@@ -473,4 +485,5 @@
         console.log('✅ Network Status Detection');
     </script>
 </body>
+
 </html>
